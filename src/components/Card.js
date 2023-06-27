@@ -6,7 +6,7 @@ export function Card(props){
 
   return(
     <article className="element">
-      <img src={props.card.link} alt="#" className="element__foto" onClick={handleClick} />
+      <img src={props.card.link} alt={props.card.name} className="element__foto" onClick={handleClick} />
       <div className="element__info">
         <h2 className="element__name">{props.card.name}</h2>
         <div className="element__rate">
