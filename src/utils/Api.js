@@ -77,6 +77,10 @@ _answerHandle(serverAnswer){
     .then(this._answerHandle);
   }
 
+  changeLikeCardStatus (cardId, isLiked) {
+    return isLiked ? this.setLike(cardId) : this.deleteLike(cardId);
+  }
+
 //---------------------
 
   setCard(name, link){
