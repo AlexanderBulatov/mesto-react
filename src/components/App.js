@@ -15,7 +15,7 @@ function App() {
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = React.useState(false);
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = React.useState(false);
-  const [isConfirmDeletePopupOpen, setConfirmDeletePopupOpen] = React.useState(false);
+  // const [isConfirmDeletePopupOpen, setConfirmDeletePopupOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState(null);
   const [deletedCard, setDeletedCard] = React.useState(null);
   const [isDataLoading, setDataLoading] = React.useState(false);
@@ -44,14 +44,15 @@ function App() {
     setDataLoading(true);
     api.setCard(place.name, place.link).then((newCard)=>{
       setCards([newCard, ...cards]);
+      closeAllPopups();
     })
     .catch(handleError)
-    .finally(() => closeAllPopups());
+    .finally(() => setDataLoading(false));
   }
 
 
   function handleCardLike(card) {
-    setDataLoading(true);
+
     // Снова проверяем, есть ли уже лайк на этой карточке
     const isLiked = card.likes.some(i => i._id === currentUser._id);
     
@@ -59,8 +60,7 @@ function App() {
     api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
         setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
     })
-    .catch(handleError)
-    .finally(() => closeAllPopups());
+    .catch(handleError);
   }
 
 
@@ -74,9 +74,10 @@ function App() {
     setDataLoading(true);
     api.deleteCard(card._id).then((newCard) => {
       setCards((state) => state.filter((cardFromState) => cardFromState._id !== card._id));
+      closeAllPopups();
     })
     .catch(handleError)
-    .finally(() => closeAllPopups());
+    .finally(() => setDataLoading(false));
   }
 
   function handleUpdateUser (userData){
@@ -86,17 +87,17 @@ function App() {
        closeAllPopups();
      })
      .catch(handleError)
-     .finally(() => closeAllPopups());
+     .finally(() => setDataLoading(false));
   }
 
   function handleUpdateAvatar({avatar}){
     setDataLoading(true);
     api.setAvatar(avatar).then((userDatafromApi)=>{
        setCurrentUser(userDatafromApi);
-       
+       closeAllPopups();
      })
      .catch(handleError)
-     .finally(() => closeAllPopups());
+     .finally(() => setDataLoading(false));
   }
 
 
@@ -119,10 +120,9 @@ function App() {
     setAddPlacePopupOpen(false);
     setEditProfilePopupOpen(false);
     setEditAvatarPopupOpen(false);
-    setConfirmDeletePopupOpen(false);
+    // setConfirmDeletePopupOpen(false);
     setSelectedCard(null);
     setDeletedCard(null);
-    setDataLoading(false)
   }
   
   return (
